@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { Advocate } from "./types";
+import { useEffect, useState } from 'react';
+import { Advocate } from './types';
 
 export default function Home() {
   const [advocates, setAdvocates] = useState<Advocate[]>([]);
   const [filteredAdvocates, setFilteredAdvocates] = useState<Advocate[]>([]);
 
   useEffect(() => {
-    console.log("fetching advocates...");
-    fetch("/api/advocates").then((response) => {
+    console.log('fetching advocates...');
+    fetch('/api/advocates').then((response) => {
       response.json().then((jsonResponse) => {
         setAdvocates(jsonResponse.data);
         setFilteredAdvocates(jsonResponse.data);
@@ -20,12 +20,12 @@ export default function Home() {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerm = e.target.value;
 
-    const searchTermElement = document.getElementById("search-term");
+    const searchTermElement = document.getElementById('search-term');
     if (searchTermElement) {
       searchTermElement.innerHTML = searchTerm;
     }
 
-    console.log("filtering advocates...");
+    console.log('filtering advocates...');
     const filteredAdvocates = advocates.filter((advocate) => {
       return (
         advocate.firstName.includes(searchTerm) ||
@@ -48,16 +48,16 @@ export default function Home() {
   };
 
   return (
-    <main style={{ margin: "24px" }}>
+    <main style={{ margin: '24px' }}>
       <h1>Solace Advocates</h1>
       <br />
       <br />
       <div>
         <p>Search</p>
         <p>
-          Searching for: <span id="search-term"></span>
+          Searching for: <span id='search-term'></span>
         </p>
-        <input style={{ border: "1px solid black" }} onChange={onChange} />
+        <input style={{ border: '1px solid black' }} onChange={onChange} />
         <button onClick={onClick}>Reset Search</button>
       </div>
       <br />

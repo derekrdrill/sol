@@ -64,13 +64,13 @@ This tells TypeScript that `e` is a React change event for an HTML input element
 **Low-level:** Changed from:
 
 ```typescript
-document.getElementById("search-term").innerHTML = searchTerm;
+document.getElementById('search-term').innerHTML = searchTerm;
 ```
 
 To:
 
 ```typescript
-const searchTermElement = document.getElementById("search-term");
+const searchTermElement = document.getElementById('search-term');
 if (searchTermElement) {
   searchTermElement.innerHTML = searchTerm;
 }
