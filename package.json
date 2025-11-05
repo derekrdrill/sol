@@ -16,6 +16,8 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.7.0",
+    "@supabase/supabase-js": "^2.79.0",
     "drizzle-orm": "^0.32.1",
     "next": "^16.0.1",
     "postgres": "^3.4.4",

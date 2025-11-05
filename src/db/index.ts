@@ -1,20 +1,18 @@
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
-
-const setup = () => {
-  if (!process.env.DATABASE_URL) {
-    console.error('DATABASE_URL is not set');
-    return {
-      select: () => ({
-        from: () => [],
-      }),
-    };
-  }
-
-  // for query purposes
-  const queryClient = postgres(process.env.DATABASE_URL);
-  const db = drizzle(queryClient);
-  return db;
+export type DbResult<T> = {
+  success: boolean;
+  data?: T;
+  error?: string;
 };
 
-export default setup();
+export { getSupabaseClient } from './client/client';
+export {
+  createError,
+  createSuccess,
+  getErrorMessage,
+  handleDbOperation,
+  handleSupabaseError,
+  notFound,
+  validationError,
+  formatErrorMessage,
+} from './errors/errors.helpers';
+export { getAdvocates } from './advocates';
