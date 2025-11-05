@@ -1,19 +1,26 @@
-import { getAdvocates } from '../db';
 import { AdvocatesRoot } from './components';
 
-export default async function Home() {
-  const result = await getAdvocates();
+async function fetchAdvocates() {
+  const apiUrl = process.env.API_URL || 'http://localhost:3000';
 
-  if (!result.success) {
-    return (
-      <main className='container mx-auto px-6 py-8'>
-        <h1 className='text-3xl font-bold mb-4'>Solace Advocates</h1>
-        <p className='text-red-600'>Error: {result.error}</p>
-      </main>
-    );
+  const response = await fetch(`${apiUrl}/api/advocates`, {
+    cache: 'no-store',
+  });
+
+  if (!response.ok) {
+    const errorData = await response
+      .json()
+      .catch(() => ({ error: 'Failed to fetch advocates' }));
+    throw new Error(errorData.error || 'Failed to load advocates');
   }
 
-  const advocates = result.data || [];
+  const { data } = await response.json();
+  return data || [];
+}
 
+async function Root() {
+  const advocates = await fetchAdvocates();
   return <AdvocatesRoot initialAdvocates={advocates} />;
 }
+
+export default Root;
