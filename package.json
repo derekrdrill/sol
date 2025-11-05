@@ -1,15 +1,19 @@
 {
-  "name": "solace-candidate-assignment",
+  "name": "sol",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "lint:fix": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
     "generate": "drizzle-kit generate",
     "migrate:up": "node ./src/db/migrate.js",
-    "seed": "tsx ./src/db/seed/index.ts"
+    "seed": "tsx ./src/db/seed/index.ts",
+    "prepare": "husky"
   },
   "dependencies": {
     "drizzle-orm": "^0.32.1",
@@ -19,13 +23,19 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
     "@types/node": "20.19.24",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "drizzle-kit": "^0.31.6",
     "eslint": "^9.39.1",
     "eslint-config-next": "^16.0.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.6",
     "postcss": "^8.4.40",
+    "prettier": "^3.6.2",
     "tailwindcss": "^3.4.7",
     "tsx": "^4.19.2",
     "typescript": "5.9.3"
@@ -36,5 +46,13 @@
       "@esbuild-kit/esm-loader": "npm:tsx@^4.19.2",
       "@esbuild-kit/core-utils": "npm:tsx@^4.19.2"
     }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ]
   }
 }
