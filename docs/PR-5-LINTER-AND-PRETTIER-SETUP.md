@@ -28,6 +28,18 @@
 - Added `eslint`, `eslint-config-next`, `@eslint/eslintrc`
 - Added `prettier`, `husky`, `lint-staged`
 
+## Issues Addressed
+
+This PR addresses **code quality problems** and **inconsistent formatting**:
+
+1. **No Code Standards:** Codebase lacked linting and formatting rules, leading to inconsistent style
+2. **Manual Formatting:** Without automated tools, developers had to manually ensure code quality
+3. **Pre-commit Protection:** No git hooks to prevent bad code from being committed
+
 ## Why This Was Important
 
-Ensures consistent code formatting across the codebase and prevents unformatted code from being committed via pre-commit hooks.
+1. **Code Quality:** Automated linting catches bugs and enforces best practices before code reaches production
+2. **Consistency:** Ensures consistent code formatting across the codebase, making it easier to read and maintain
+3. **Prevents Bad Commits:** Pre-commit hooks prevent unformatted or problematic code from being committed
+4. **Team Standards:** Establishes clear code quality standards that all contributors must follow
+5. **Best Practices:** Follows industry-standard tooling for TypeScript/React projects

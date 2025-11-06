@@ -56,12 +56,22 @@ Added to `package.json`:
 - `@supabase/ssr@^0.7.0` - Server-side rendering support
 - `@supabase/supabase-js@^2.79.0` - Supabase JavaScript client
 
+## Issues Fixed
+
+This PR resolved **bad practices** and **performance problems**:
+
+1. **Client-Side Data Fetching:** Removed `useEffect` hooks for initial data loading - this is an anti-pattern in Next.js App Router
+2. **Poor Performance:** Client-side fetching requires additional round trips and shows loading states unnecessarily
+3. **SEO Issues:** Data not available on initial render harms search engine indexing
+4. **No Error Handling:** Missing standardized error handling for database operations
+
 ## Why These Changes Matter
 
-1. **Performance:** Server-side data fetching eliminates client-side loading states and reduces TTFB
-2. **SEO:** Data is available on initial page load, improving search engine indexing
-3. **Type Safety:** Typed database operations with `DbResult<T>` provide compile-time error checking
-4. **Best Practices:** Follows Next.js 13+ App Router patterns for server/client component separation
+1. **Eliminates Bad Practices:** Removes client-side `useEffect` for initial data fetching - follows Next.js App Router best practices
+2. **Performance:** Server-side data fetching eliminates client-side loading states and reduces TTFB
+3. **SEO:** Data is available on initial page load, improving search engine indexing
+4. **Type Safety:** Typed database operations with `DbResult<T>` provide compile-time error checking
+5. **Error Handling:** Standardized error handling prevents silent failures and improves debugging
 
 ## Database Setup Required
 

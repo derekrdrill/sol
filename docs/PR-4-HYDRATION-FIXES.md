@@ -50,12 +50,20 @@ In HTML, `<th>` elements cannot be direct children of `<thead>`. They must be wr
 
 This ensures React can properly track and update list items during re-renders.
 
+## Issues Fixed
+
+This PR resolved **critical runtime errors** and **HTML validation issues**:
+
+1. **Hydration Mismatch Error:** Invalid HTML structure caused Next.js hydration to fail, completely breaking the application
+2. **Invalid HTML:** `<th>` elements cannot be direct children of `<thead>` - this violates HTML standards and causes rendering errors
+3. **React Performance Issues:** Missing `key` props cause React to inefficiently re-render lists and can lead to state bugs
+
 ## Why These Changes Matter
 
-1. **Hydration Errors:** Fixes the critical hydration mismatch error that was breaking the application
-2. **HTML Validity:** Ensures the markup follows proper HTML standards
+1. **Critical Bug Fix:** Fixes the hydration mismatch error that was preventing the application from running
+2. **HTML Standards Compliance:** Ensures the markup follows proper HTML standards, preventing rendering errors
 3. **React Best Practices:** Prevents potential warnings and performance issues with list rendering
-4. **Clean Slate:** Provides an error-free codebase to build upon for future changes
+4. **Production Readiness:** Provides an error-free codebase that can actually run without crashing
 
 ## Result
 

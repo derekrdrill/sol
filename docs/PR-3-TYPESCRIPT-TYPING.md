@@ -121,13 +121,24 @@ To:
 
 Added the `string` type annotation and a `key` prop for React's list rendering requirements.
 
+## Issues Fixed
+
+This PR resolved multiple **runtime error risks** and **bad practices**:
+
+1. **Potential Null Reference Errors:** Accessing `innerHTML` on potentially null DOM elements could crash the app
+2. **Incorrect Array Methods:** Calling `.includes()` on arrays incorrectly (should use `.some()` for array searching)
+3. **Type Errors:** Calling `.includes()` on numbers (should convert to string first)
+4. **Implicit Any Types:** Untyped event handlers violated TypeScript strict mode, hiding potential bugs
+5. **React Best Practices:** Missing `key` props in list rendering causes React warnings and potential rendering issues
+
 ## Why These Changes Matter
 
-1. **Type Safety:** Proper typing catches errors at compile time instead of runtime
-2. **Developer Experience:** IDEs can provide better autocomplete and error detection
-3. **Code Quality:** Explicit types make the codebase more maintainable and self-documenting
-4. **Prevents Bugs:** Type checking prevents common mistakes like accessing properties on undefined values or calling methods on wrong types
-5. **Team Collaboration:** Clear type definitions help other developers understand the data structures
+1. **Prevents Runtime Errors:** Proper typing catches errors at compile time instead of runtime - fixes critical bugs before they reach production
+2. **Eliminates Bad Practices:** Removes unsafe patterns like accessing properties without null checks
+3. **Developer Experience:** IDEs can provide better autocomplete and error detection
+4. **Code Quality:** Explicit types make the codebase more maintainable and self-documenting
+5. **Prevents Bugs:** Type checking prevents common mistakes like accessing properties on undefined values or calling methods on wrong types
+6. **Team Collaboration:** Clear type definitions help other developers understand the data structures
 
 ## Result
 

@@ -16,9 +16,10 @@
 
 ## Why This Was Important
 
-1. **Security**: Next.js 14 had critical vulnerabilities that are patched in v16
-2. **Maintenance**: Deprecated packages (`inflight`, `rimraf@3`, `glob@7`, `@esbuild-kit/*`, `eslint@8`) are no longer supported and may leak memory or have security issues
-3. **Future-proofing**: Using supported packages ensures continued compatibility and security updates
+1. **Security**: Next.js 14 had **critical security vulnerabilities** that are patched in v16 - continuing to use compromised dependencies posed a security risk
+2. **Maintenance**: Deprecated packages (`inflight`, `rimraf@3`, `glob@7`, `@esbuild-kit/*`, `eslint@8`) are no longer supported and may leak memory or have security issues - these needed immediate attention
+3. **Best Practices**: Using deprecated packages violates modern development standards and creates technical debt
+4. **Future-proofing**: Using supported packages ensures continued compatibility and security updates
 
 ## Override Solution
 

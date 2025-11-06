@@ -31,13 +31,23 @@ Created `src/app/error.tsx`:
 - Provides "Try again" button to reset error state
 - Follows Next.js App Router error handling patterns
 
+## Issues Fixed
+
+This PR resolved **architectural problems** and **bad practices**:
+
+1. **Direct Database Calls:** Components were calling database functions directly - violates separation of concerns
+2. **No API Layer:** Missing abstraction layer between frontend and database makes testing and maintenance difficult
+3. **Error Handling Anti-pattern:** Using try/catch in server components instead of Next.js error boundaries
+4. **Tight Coupling:** Frontend tightly coupled to database implementation
+
 ## Why These Changes Matter
 
-1. **Specification Compliance:** Follows the requirement to make all API calls through Next.js backend
-2. **Separation of Concerns:** Treats API server as separate application, improving architecture
-3. **Better Error Handling:** Uses Next.js error boundaries instead of try/catch in components
+1. **Architectural Best Practices:** Follows specification requirement to make all API calls through Next.js backend - proper separation of concerns
+2. **Separation of Concerns:** Treats API server as separate application, improving architecture and testability
+3. **Better Error Handling:** Uses Next.js error boundaries instead of try/catch in components - follows framework patterns
 4. **Flexibility:** API URL can be configured via environment variable for different environments
-5. **HTTP Standards:** Proper status codes and response formats
+5. **HTTP Standards:** Proper status codes and response formats improve API contract clarity
+6. **Maintainability:** Centralized API logic makes changes easier and reduces bugs
 
 ## Environment Variables
 

@@ -2,7 +2,14 @@
 
 ## Overview
 
-This PR replaces the table-based UI with a modern grid/list toggle view and adds search functionality. The implementation follows component-based architecture, uses Tailwind CSS for styling, and maintains clean separation of concerns.
+This PR replaces the table-based UI with a modern grid/list toggle view and adds search functionality. The implementation follows component-based architecture, uses Tailwind CSS for styling, and maintains clean separation of concerns. This addresses the previous monolithic table structure and improves maintainability.
+
+## Issues Addressed
+
+1. **Poor Component Structure:** Previous implementation used a single large component with table markup - difficult to maintain and extend
+2. **Inline Styles:** Mixed inline styles and CSS classes made styling inconsistent and hard to maintain
+3. **Non-Responsive Design:** Table-based layout doesn't adapt well to mobile devices
+4. **No Reusability:** Unable to reuse components or customize views based on user preferences
 
 ## Changes Made
 
