@@ -1,12 +1,38 @@
-import db from "../../../db";
-import { advocates } from "../../../db/schema";
-import { advocateData } from "../../../db/seed/advocates";
+import { getAdvocates } from '../../../db';
+import type { AdvocateSearchParams } from '../../../db';
 
-export async function GET() {
-  // Uncomment this line to use a database
-  // const data = await db.select().from(advocates);
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
 
-  const data = advocateData;
+  const params: AdvocateSearchParams = {};
 
-  return Response.json({ data });
+  const search = searchParams.get('search');
+  if (search) {
+    params.search = search;
+  }
+
+  const degrees = searchParams.get('degrees');
+  if (degrees) {
+    params.degrees = degrees.split(',');
+  }
+
+  const experienceRange = searchParams.get('experienceRange');
+  if (experienceRange) {
+    params.experienceRange = experienceRange;
+  }
+
+  const specialties = searchParams.get('specialties');
+  if (specialties) {
+    params.specialties = specialties.split(',');
+  }
+
+  const result = await getAdvocates(
+    Object.keys(params).length > 0 ? params : undefined
+  );
+
+  if (!result.success) {
+    return Response.json({ error: result.error }, { status: 500 });
+  }
+
+  return Response.json({ data: result.data || [] });
 }
