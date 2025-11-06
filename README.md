@@ -109,6 +109,14 @@ src/
 
 ## ✨ Key Features
 
+### 🔐 Authentication
+
+- **Email/password authentication** with Supabase Auth
+- **Google OAuth** integration for seamless sign-in
+- **Route protection** via Next.js middleware
+- **Session management** with SSR-compatible cookie handling
+- **Email confirmation** support with user-friendly messaging
+
 ### 🔍 Search & Filtering
 
 - **Server-side search** across name, city, degree, and specialties
@@ -148,6 +156,7 @@ Comprehensive PR documentation available in `docs/`:
 - **PR-8**: API Route Integration
 - **PR-9**: Filter Additions
 - **PR-10**: Backend Search & Filtering Optimization
+- **PR-11**: Authentication System
 
 ## 🚀 Getting Started
 
