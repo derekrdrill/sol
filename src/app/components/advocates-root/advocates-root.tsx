@@ -154,7 +154,7 @@ function AdvocatesRoot({ initialAdvocates }: AdvocatesProps) {
             onChange={setSearchTerm}
             onSearch={handleSearch}
             isLoading={isLoading}
-            placeholder='Search by name, city, degree, experience, or specialties...'
+            placeholder='Search by name, city or degree...'
           />
         </div>
         <FilterButton
