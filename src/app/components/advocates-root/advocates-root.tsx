@@ -1,18 +1,13 @@
 'use client';
 
 import classNames from 'classnames';
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Advocate } from '../../../types';
 import { AdvocateCard } from '../../components';
 import { AdvocateListItem } from '../../components';
 import { SearchInput } from '../../components';
 import { FilterButton } from '../../components';
-import { filterAdvocates } from '../search-input/utils';
-import {
-  getUniqueDegrees,
-  getUniqueSpecialties,
-  getDefaultFilters,
-} from '../filters/utils';
+import { getDefaultFilters } from '../filters/utils';
 import type { AdvocateFilters } from '../filters/types';
 
 interface AdvocatesProps {
@@ -24,21 +19,99 @@ type ViewMode = 'grid' | 'list';
 function AdvocatesRoot({ initialAdvocates }: AdvocatesProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [searchTerm, setSearchTerm] = useState('');
+  const [activeSearchTerm, setActiveSearchTerm] = useState('');
   const [filters, setFilters] = useState<AdvocateFilters>(getDefaultFilters());
-
-  const availableDegrees = useMemo(
-    () => getUniqueDegrees(initialAdvocates),
-    [initialAdvocates]
-  );
-  const availableSpecialties = useMemo(
-    () => getUniqueSpecialties(initialAdvocates),
-    [initialAdvocates]
+  const [advocates, setAdvocates] = useState<Advocate[]>(initialAdvocates);
+  const [isLoading, setIsLoading] = useState(false);
+  const [availableDegrees, setAvailableDegrees] = useState<string[]>([]);
+  const [availableSpecialties, setAvailableSpecialties] = useState<string[]>(
+    []
   );
 
-  const filteredAdvocates = useMemo(
-    () => filterAdvocates(initialAdvocates, searchTerm, filters),
-    [initialAdvocates, searchTerm, filters]
-  );
+  useEffect(() => {
+    async function fetchFilterOptions() {
+      try {
+        const response = await fetch('/api/advocates/filter-options');
+        if (response.ok) {
+          const { data } = await response.json();
+          setAvailableDegrees(data.degrees || []);
+          setAvailableSpecialties(data.specialties || []);
+        }
+      } catch (error) {
+        console.error('Failed to fetch filter options:', error);
+      }
+    }
+
+    fetchFilterOptions();
+  }, []);
+
+  useEffect(() => {
+    async function fetchAdvocates() {
+      setIsLoading(true);
+      try {
+        const params = new URLSearchParams();
+
+        if (activeSearchTerm.trim()) {
+          params.append('search', activeSearchTerm.trim());
+        }
+
+        if (filters.degrees.length > 0) {
+          params.append('degrees', filters.degrees.join(','));
+        }
+
+        if (filters.experienceRange) {
+          params.append('experienceRange', filters.experienceRange);
+        }
+
+        if (filters.specialties.length > 0) {
+          params.append('specialties', filters.specialties.join(','));
+        }
+
+        const queryString = params.toString();
+        const url = queryString
+          ? `/api/advocates?${queryString}`
+          : '/api/advocates';
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+          const errorData = await response
+            .json()
+            .catch(() => ({ error: 'Failed to fetch advocates' }));
+          throw new Error(errorData.error || 'Failed to load advocates');
+        }
+
+        const { data } = await response.json();
+        setAdvocates(data || []);
+      } catch (error) {
+        console.error('Error fetching advocates:', error);
+        setAdvocates([]);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    const hasActiveFilters =
+      activeSearchTerm.trim() ||
+      filters.degrees.length > 0 ||
+      filters.experienceRange ||
+      filters.specialties.length > 0;
+
+    if (hasActiveFilters) {
+      fetchAdvocates();
+    } else {
+      setAdvocates(initialAdvocates);
+    }
+  }, [activeSearchTerm, filters, initialAdvocates]);
+
+  const handleSearch = () => {
+    setActiveSearchTerm(searchTerm.trim());
+  };
+
+  const handleFiltersChange = (newFilters: AdvocateFilters) => {
+    setFilters(newFilters);
+    setActiveSearchTerm(searchTerm.trim());
+  };
 
   const isGridMode = viewMode === 'grid';
   const isListMode = viewMode === 'list';
@@ -74,30 +147,45 @@ function AdvocatesRoot({ initialAdvocates }: AdvocatesProps) {
           <SearchInput
             value={searchTerm}
             onChange={setSearchTerm}
+            onSearch={handleSearch}
+            isLoading={isLoading}
             placeholder='Search by name, city, degree, experience, or specialties...'
           />
         </div>
         <FilterButton
           filters={filters}
-          onFiltersChange={setFilters}
+          onApplyFilters={handleFiltersChange}
           availableDegrees={availableDegrees}
           availableSpecialties={availableSpecialties}
         />
       </div>
 
-      {isGridMode && (
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-          {filteredAdvocates.map((advocate) => (
-            <AdvocateCard key={advocate.id} advocate={advocate} />
-          ))}
+      {isLoading ? (
+        <div className='text-center py-8'>
+          <p className='text-gray-600'>Loading advocates...</p>
         </div>
-      )}
-      {isListMode && (
-        <div className='space-y-4'>
-          {filteredAdvocates.map((advocate) => (
-            <AdvocateListItem key={advocate.id} advocate={advocate} />
-          ))}
-        </div>
+      ) : (
+        <>
+          {isGridMode && (
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+              {advocates.map((advocate) => (
+                <AdvocateCard key={advocate.id} advocate={advocate} />
+              ))}
+            </div>
+          )}
+          {isListMode && (
+            <div className='space-y-4'>
+              {advocates.map((advocate) => (
+                <AdvocateListItem key={advocate.id} advocate={advocate} />
+              ))}
+            </div>
+          )}
+          {advocates.length === 0 && !isLoading && (
+            <div className='text-center py-8'>
+              <p className='text-gray-600'>No advocates found.</p>
+            </div>
+          )}
+        </>
       )}
     </main>
   );
