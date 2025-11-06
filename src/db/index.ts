@@ -5,6 +5,7 @@ export type DbResult<T> = {
 };
 
 export { getSupabaseClient } from './client/client';
+export { createBrowserClient } from './client/browser-client';
 export {
   createError,
   createSuccess,

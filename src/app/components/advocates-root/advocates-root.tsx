@@ -7,6 +7,7 @@ import { AdvocateCard } from '../../components';
 import { AdvocateListItem } from '../../components';
 import { SearchInput } from '../../components';
 import { FilterButton } from '../../components';
+import { UserMenu } from '../../components';
 import { getDefaultFilters } from '../filters/utils';
 import type { AdvocateFilters } from '../filters/types';
 
@@ -118,6 +119,10 @@ function AdvocatesRoot({ initialAdvocates }: AdvocatesProps) {
 
   return (
     <main className='container mx-auto px-6 py-8'>
+      <div className='flex justify-end mb-4'>
+        <UserMenu />
+      </div>
+
       <div className='flex items-center justify-between mb-8'>
         <h1 className='text-3xl font-bold'>Solace Advocates</h1>
         <div className='flex gap-2 border border-gray-300 rounded-lg p-1'>
