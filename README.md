@@ -220,7 +220,7 @@ USING (true);
 
 While the current implementation provides a solid foundation, additional time would allow for several enhancements that would further improve scalability, maintainability, and developer confidence:
 
-### TanStack Query (React Query) 🔄
+### TanStack Query (React Query) 🧠
 
 **Current:** Manual `useEffect` hooks with `fetch` calls and local state management.
 
@@ -303,7 +303,7 @@ A comprehensive test suite would instill confidence when scaling the application
 
 This would transform the application from a simple directory into a comprehensive platform for connecting patients with advocates. The additional metadata would enable more sophisticated search and matching algorithms, while the detailed profiles would improve user trust and engagement.
 
-### Enhanced Loading States ✨
+### Enhanced Loading States 🔄
 
 **Current:** Simple "Loading advocates..." text message during data fetching.
 
@@ -324,6 +324,48 @@ This would transform the application from a simple directory into a comprehensiv
 - **Accessibility** - proper ARIA labels and loading announcements for screen readers
 
 The shimmer effect would replicate the grid/list layout during loading, providing a seamless transition that maintains visual hierarchy and reduces perceived wait time. This attention to detail elevates the user experience and demonstrates a commitment to polish and professionalism.
+
+### Virtualized Rendering (React Virtuoso / React Window) 📜
+
+**Current:** All advocate results rendered in the DOM simultaneously, which could cause performance issues with large result sets.
+
+**With Virtualized Rendering:**
+
+- **Windowed rendering** only rendering visible items plus a small buffer
+- **Constant DOM size** regardless of result count (thousands of results render smoothly)
+- **Improved scroll performance** with virtual scrolling techniques
+- **Memory efficiency** reducing browser memory usage for large datasets
+- **Smooth interactions** maintaining 60fps even with thousands of items
+
+**Benefits:**
+
+- **Scalability** - handles thousands of results without performance degradation
+- **Better UX** - smooth scrolling and interactions regardless of result count
+- **Resource efficiency** - minimal DOM nodes reduce memory footprint
+- **Production-ready** - essential for applications expecting large result sets
+
+Libraries like React Virtuoso or React Window would enable rendering only the visible portion of the results list, dramatically improving performance when potentially thousands of advocates are returned. This would ensure the application remains responsive and performant as the dataset grows, providing a seamless user experience even with extensive result sets.
+
+### Sorting Implementation 🔢
+
+**Current:** Results displayed in database default order without user-controlled sorting options.
+
+**With Sorting:**
+
+- **Multiple sort options** by name (A-Z, Z-A), experience (low-high, high-low), city, degree
+- **UI controls** dropdown or button group for selecting sort criteria
+- **Server-side sorting** leveraging PostgreSQL `ORDER BY` for efficient sorting
+- **Persistent sort preference** maintaining sort selection across filter changes
+- **Visual indicators** showing current sort direction and field
+
+**Benefits:**
+
+- **User control** - users can organize results to their preference
+- **Better discoverability** - sorting by experience helps find most qualified advocates
+- **Database efficiency** - PostgreSQL handles sorting efficiently at query time
+- **Simple implementation** - straightforward addition to existing query structure
+
+While the implementation would be relatively straightforward, adding sorting controls and integrating them with the existing filter and search functionality would provide users with more control over how results are displayed, improving the overall user experience and making it easier to find advocates that match specific criteria.
 
 ### Better Relational Database Setup 🗄️
 
