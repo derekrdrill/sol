@@ -14,10 +14,14 @@ export default function UserMenu() {
         const response = await fetch('/api/auth/user');
         if (response.ok) {
           const data = await response.json();
-          setUser(data.user);
+          setUser(data.user || null);
+        } else {
+          // If not authenticated, user should be null
+          setUser(null);
         }
       } catch (error) {
         console.error('Failed to fetch user:', error);
+        setUser(null);
       } finally {
         setIsLoading(false);
       }
@@ -42,11 +46,18 @@ export default function UserMenu() {
   };
 
   if (isLoading) {
-    return null;
+    return <div className='text-gray-600 text-sm'>Loading...</div>;
   }
 
   if (!user) {
-    return null;
+    return (
+      <button
+        onClick={() => router.push('/auth/login')}
+        className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm'
+      >
+        Sign In
+      </button>
+    );
   }
 
   return (
