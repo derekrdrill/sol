@@ -6,7 +6,14 @@ import type { Advocate } from '../../../types';
 import { AdvocateCard } from '../../components';
 import { AdvocateListItem } from '../../components';
 import { SearchInput } from '../../components';
+import { FilterButton } from '../../components';
 import { filterAdvocates } from '../search-input/utils';
+import {
+  getUniqueDegrees,
+  getUniqueSpecialties,
+  getDefaultFilters,
+} from '../filters/utils';
+import type { AdvocateFilters } from '../filters/types';
 
 interface AdvocatesProps {
   initialAdvocates: Advocate[];
@@ -17,10 +24,20 @@ type ViewMode = 'grid' | 'list';
 function AdvocatesRoot({ initialAdvocates }: AdvocatesProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [searchTerm, setSearchTerm] = useState('');
+  const [filters, setFilters] = useState<AdvocateFilters>(getDefaultFilters());
+
+  const availableDegrees = useMemo(
+    () => getUniqueDegrees(initialAdvocates),
+    [initialAdvocates]
+  );
+  const availableSpecialties = useMemo(
+    () => getUniqueSpecialties(initialAdvocates),
+    [initialAdvocates]
+  );
 
   const filteredAdvocates = useMemo(
-    () => filterAdvocates(initialAdvocates, searchTerm),
-    [initialAdvocates, searchTerm]
+    () => filterAdvocates(initialAdvocates, searchTerm, filters),
+    [initialAdvocates, searchTerm, filters]
   );
 
   const isGridMode = viewMode === 'grid';
@@ -52,11 +69,19 @@ function AdvocatesRoot({ initialAdvocates }: AdvocatesProps) {
         </div>
       </div>
 
-      <div className='mb-6'>
-        <SearchInput
-          value={searchTerm}
-          onChange={setSearchTerm}
-          placeholder='Search by name, city, degree, experience, or specialties...'
+      <div className='mb-6 flex flex-col sm:flex-row gap-4'>
+        <div className='flex-1'>
+          <SearchInput
+            value={searchTerm}
+            onChange={setSearchTerm}
+            placeholder='Search by name, city, degree, experience, or specialties...'
+          />
+        </div>
+        <FilterButton
+          filters={filters}
+          onFiltersChange={setFilters}
+          availableDegrees={availableDegrees}
+          availableSpecialties={availableSpecialties}
         />
       </div>
 
