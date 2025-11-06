@@ -15,4 +15,5 @@ export {
   validationError,
   formatErrorMessage,
 } from './errors/errors.helpers';
-export { getAdvocates } from './advocates';
+export { getAdvocates, getFilterOptions } from './advocates';
+export type { AdvocateSearchParams } from './advocates';

@@ -7,14 +7,14 @@ import FilterPanel from './filter-panel';
 
 interface FilterButtonProps {
   filters: AdvocateFilters;
-  onFiltersChange: (filters: AdvocateFilters) => void;
+  onApplyFilters: (filters: AdvocateFilters) => void;
   availableDegrees: string[];
   availableSpecialties: string[];
 }
 
 function FilterButton({
   filters,
-  onFiltersChange,
+  onApplyFilters,
   availableDegrees,
   availableSpecialties,
 }: FilterButtonProps) {
@@ -58,7 +58,7 @@ function FilterButton({
       {isOpen && (
         <FilterPanel
           filters={filters}
-          onFiltersChange={onFiltersChange}
+          onApplyFilters={onApplyFilters}
           availableDegrees={availableDegrees}
           availableSpecialties={availableSpecialties}
           onClose={() => setIsOpen(false)}

@@ -1,11 +1,13 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import type { AdvocateFilters } from './types';
 import { EXPERIENCE_RANGES } from './types';
+import { getDefaultFilters } from './utils';
 
 interface FilterPanelProps {
   filters: AdvocateFilters;
-  onFiltersChange: (filters: AdvocateFilters) => void;
+  onApplyFilters: (filters: AdvocateFilters) => void;
   availableDegrees: string[];
   availableSpecialties: string[];
   onClose: () => void;
@@ -13,30 +15,48 @@ interface FilterPanelProps {
 
 function FilterPanel({
   filters,
-  onFiltersChange,
+  onApplyFilters,
   availableDegrees,
   availableSpecialties,
   onClose,
 }: FilterPanelProps) {
+  const [localFilters, setLocalFilters] = useState<AdvocateFilters>(filters);
+
+  useEffect(() => {
+    setLocalFilters(filters);
+  }, [filters]);
+
   const handleDegreeToggle = (degree: string) => {
-    const newDegrees = filters.degrees.includes(degree)
-      ? filters.degrees.filter((d) => d !== degree)
-      : [...filters.degrees, degree];
-    onFiltersChange({ ...filters, degrees: newDegrees });
+    const newDegrees = localFilters.degrees.includes(degree)
+      ? localFilters.degrees.filter((d) => d !== degree)
+      : [...localFilters.degrees, degree];
+    setLocalFilters({ ...localFilters, degrees: newDegrees });
   };
 
   const handleExperienceChange = (range: string | null) => {
-    onFiltersChange({
-      ...filters,
-      experienceRange: filters.experienceRange === range ? null : range,
+    setLocalFilters({
+      ...localFilters,
+      experienceRange: localFilters.experienceRange === range ? null : range,
     });
   };
 
   const handleSpecialtyToggle = (specialty: string) => {
-    const newSpecialties = filters.specialties.includes(specialty)
-      ? filters.specialties.filter((s) => s !== specialty)
-      : [...filters.specialties, specialty];
-    onFiltersChange({ ...filters, specialties: newSpecialties });
+    const newSpecialties = localFilters.specialties.includes(specialty)
+      ? localFilters.specialties.filter((s) => s !== specialty)
+      : [...localFilters.specialties, specialty];
+    setLocalFilters({ ...localFilters, specialties: newSpecialties });
+  };
+
+  const handleApply = () => {
+    onApplyFilters(localFilters);
+    onClose();
+  };
+
+  const handleReset = () => {
+    const resetFilters = getDefaultFilters();
+    setLocalFilters(resetFilters);
+    onApplyFilters(resetFilters);
+    onClose();
   };
 
   return (
@@ -58,7 +78,7 @@ function FilterPanel({
               <label key={degree} className='flex items-center'>
                 <input
                   type='checkbox'
-                  checked={filters.degrees.includes(degree)}
+                  checked={localFilters.degrees.includes(degree)}
                   onChange={() => handleDegreeToggle(degree)}
                   className='mr-2'
                 />
@@ -78,7 +98,7 @@ function FilterPanel({
                 <input
                   type='radio'
                   name='experience'
-                  checked={filters.experienceRange === range.value}
+                  checked={localFilters.experienceRange === range.value}
                   onChange={() => handleExperienceChange(range.value)}
                   className='mr-2'
                 />
@@ -97,7 +117,7 @@ function FilterPanel({
               <label key={specialty} className='flex items-center'>
                 <input
                   type='checkbox'
-                  checked={filters.specialties.includes(specialty)}
+                  checked={localFilters.specialties.includes(specialty)}
                   onChange={() => handleSpecialtyToggle(specialty)}
                   className='mr-2'
                 />
@@ -106,6 +126,21 @@ function FilterPanel({
             ))}
           </div>
         </div>
+      </div>
+
+      <div className='flex gap-2 mt-6 pt-4 border-t border-gray-200'>
+        <button
+          onClick={handleApply}
+          className='flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'
+        >
+          Apply Filters
+        </button>
+        <button
+          onClick={handleReset}
+          className='px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors'
+        >
+          Reset
+        </button>
       </div>
     </div>
   );
